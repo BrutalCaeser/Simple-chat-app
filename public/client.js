@@ -23,6 +23,22 @@ sendButton.addEventListener('click', () => {
     }
 });
 
+messageInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+function sendMessage() {
+    const message = messageInput.value.trim();
+    if (message !== '') {
+        const messageWithEmojis = replaceWordsWithEmojis(message);
+        socket.emit('chat message', { username, message: messageWithEmojis });
+        messageInput.value = '';
+    }
+}
+
+
 socket.on('user list', (users) => {
     userList.innerHTML = '';
     users.forEach(user => {
