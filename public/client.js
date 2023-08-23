@@ -17,7 +17,8 @@ socket.emit('set username', username);
 sendButton.addEventListener('click', () => {
     const message = messageInput.value.trim();
     if (message !== '') {
-        socket.emit('chat message', { username, message });
+        const messageWithEmojis = replaceWordsWithEmojis(message);
+        socket.emit('chat message', { username, message: messageWithEmojis });
         messageInput.value = '';
     }
 });
@@ -36,3 +37,22 @@ socket.on('chat message', (data) => {
     messageDiv.textContent = `${data.username}: ${data.message}`;
     messages.appendChild(messageDiv);
 });
+
+function replaceWordsWithEmojis(message) {
+    const wordMappings = {
+        "react": "⚛️",
+        "woah": "😮",
+        "hey": "👋",
+        "lol": "😂",
+        "like": "❤️",
+        "congratulations": "🎉"
+    };
+
+    const words = message.split(" ");
+    const transformedWords = words.map(word => {
+        const lowerCaseWord = word.toLowerCase();
+        return wordMappings[lowerCaseWord] || word;
+    });
+
+    return transformedWords.join(" ");
+}
