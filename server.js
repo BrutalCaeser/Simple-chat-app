@@ -23,6 +23,9 @@ io.on('connection', (socket) => {
     socket.on('chat message', (data) => {
         io.emit('chat message', data); // Broadcast the message to all connected clients
     });
+    socket.on('slash command', (data) => {
+        socket.emit('slash command', data); // Emit only to the sender
+    });
 });
 
 function getUserList() {

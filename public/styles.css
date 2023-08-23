@@ -77,6 +77,38 @@ body {
     cursor: pointer;
 }
 
+/* Add this to your existing CSS styles */
+
+/* Modal styles */
+.modal {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    width: 60%;
+    max-width: 400px;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 /* Responsive styles */
 @media screen and (max-width: 768px) {
     .chat-app {
