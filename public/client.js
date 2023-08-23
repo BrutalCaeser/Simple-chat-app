@@ -38,21 +38,21 @@ socket.on('chat message', (data) => {
     messages.appendChild(messageDiv);
 });
 
-socket.on('new user', (username) => {
-    showMessage(`User ${username} has entered the chat`);
-});
-
 function replaceWordsWithEmojis(message) {
-    // ... existing code ...
-}
+    const wordMappings = {
+        "react": "⚛️",
+        "woah": "😮",
+        "hey": "👋",
+        "lol": "😂",
+        "like": "❤️",
+        "congratulations": "🎉"
+    };
 
-function showMessage(message) {
-    const alertBox = document.createElement('div');
-    alertBox.className = 'alert';
-    alertBox.textContent = message;
-    document.body.appendChild(alertBox);
+    const words = message.split(" ");
+    const transformedWords = words.map(word => {
+        const lowerCaseWord = word.toLowerCase();
+        return wordMappings[lowerCaseWord] || word;
+    });
 
-    setTimeout(() => {
-        document.body.removeChild(alertBox);
-    }, 3000); // Remove the alert after 3 seconds
+    return transformedWords.join(" ");
 }
