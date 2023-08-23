@@ -8,33 +8,41 @@ const io = socketIo(server);
 
 app.use(express.static(__dirname + '/public'));
 
-const users = {}; // Track connected users
+const users = new Set(); // Track connected users
+const chatHistory = []; // Store chat history
 
 io.on('connection', (socket) => {
     console.log('A user connected');
 
     socket.on('disconnect', () => {
-        if (users[socket.id]) {
-            const username = users[socket.id];
-            delete users[socket.id];
+        if (socket.username) {
+            users.delete(socket.username);
             io.emit('user list', getUserList());
-            console.log(`${username} disconnected`);
+            console.log(`${socket.username} disconnected`);
         }
     });
 
     socket.on('set username', (username) => {
         socket.username = username;
-        users[socket.id] = username;
+        users.add(username);
         io.emit('user list', getUserList());
+        sendChatHistory(socket);
     });
 
     socket.on('chat message', (data) => {
+        chatHistory.push(data);
         io.emit('chat message', data); // Broadcast the message to all connected clients
     });
 });
 
 function getUserList() {
-    return Object.values(users);
+    return Array.from(users);
+}
+
+function sendChatHistory(socket) {
+    chatHistory.forEach(message => {
+        socket.emit('chat message', message);
+    });
 }
 
 const PORT = process.env.PORT || 3000;
