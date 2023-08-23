@@ -8,15 +8,23 @@ const io = socketIo(server);
 
 app.use(express.static(__dirname + '/public'));
 
+const users = {}; // Track connected users
+
 io.on('connection', (socket) => {
     console.log('A user connected');
 
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        if (users[socket.id]) {
+            const username = users[socket.id];
+            delete users[socket.id];
+            io.emit('user list', getUserList());
+            console.log(`${username} disconnected`);
+        }
     });
 
     socket.on('set username', (username) => {
         socket.username = username;
+        users[socket.id] = username;
         io.emit('user list', getUserList());
     });
 
@@ -26,13 +34,7 @@ io.on('connection', (socket) => {
 });
 
 function getUserList() {
-    const users = [];
-    io.sockets.sockets.forEach(socket => {
-        if (socket.username) {
-            users.push(socket.username);
-        }
-    });
-    return users;
+    return Object.values(users);
 }
 
 const PORT = process.env.PORT || 3000;
