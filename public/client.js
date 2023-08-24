@@ -79,7 +79,7 @@ function handleSlashCommand(command,args) {
 }
 
 function showHelpDialog() {
-    const helpMessage = 'Available Slash Commands:<br>/help - Open a small dialogue box showing all the available slash commands<br>/random - Generate a random number<br>/clear - Clear the chat<br>/rem - Store name value pair' ;
+    const helpMessage = 'Available Slash Commands:<br>/help - Open a small dialogue box showing all the available slash commands<br>/random - Generate a random number<br>/clear - Clear the chat<br>/rem - Store name value pair<br>/calc - Your Chat Calculator' ;
 
     const modal = document.createElement('div');
     modal.className = 'modal';
