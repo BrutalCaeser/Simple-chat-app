@@ -6,13 +6,19 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+let onlineUsers = 0; // Initial count of online users
+
 app.use(express.static(__dirname + '/public'));
 
 io.on('connection', (socket) => {
     console.log('A user connected');
+    onlineUsers++; // Increment the count when a user connects
+    io.emit('user count', onlineUsers); // Emit the updated count to all clients
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
+        onlineUsers--; // Decrement the count when a user disconnects
+        io.emit('user count', onlineUsers); // Emit the updated count to all clients
     });
 
     socket.on('set username', (username) => {
